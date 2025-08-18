@@ -1,0 +1,99 @@
+file_load:
+  #model_path: /home/liangshuqiao/agent/Qwen2.5-14B-Instruct #模型文件路径
+  # model_path: /home/liangshuqiao/agent/Qwen2-7B #模型文件路径
+  model_path: /home/liangshuqiao/models/DeepSeek-R1-Distill-Qwen-7B #模型文件路径
+  dataset_path: dataset/own/Medical_20250816.json #数据集文件路径
+  eval_dataset_path: dataset/meituan_data_clean_final.csv #验证集文件路径
+  test_size: 0.2 #验证集占数据集占比：0~1
+  split_way: train #数据集分割方式
+  lora_output_path: output
+  save_model_path: model_output/qwen2
+  gguf_path: model_output/qwen2_14b_all_lora_gguf
+  logging_path: trainlog
+  shuffle: True
+
+training_arg:
+  dtype: torch.float16
+  load_in_4bit: True #是否加载为4bit
+  batch_size: 4 #批处理大小
+  gradient_accumulator_steps: 4 #梯度累积步数
+  warmup_steps: 1
+  epoch: 100 #训练轮数（一般比无监督短很多，10次完整遍历数据即可）
+  eval_steps: 10
+  learning_rate: 1e-4
+  lr_scheduler_type: cosine #学习率调度类型:constant常数  linear线性衰减  cosine余弦退火  cosine_with_restarts余弦退火与重启  polynomial多项式衰减
+  max_seq_length: 4096
+  use_history: False #是否在微调过程中启用多轮对话
+
+  #以下参数除非你自己知道你在干嘛不然就默认
+  r: 8
+  target_modules: [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj",
+    ] # 目标模块
+  lora_alpha: 16 # 缩放因子
+  lora_dropout: 0.1 # dropout
+  bias: "none" # 不调整偏置
+  use_gradient_checkpointing: "unsloth" # 启用梯度检查点，进一步节省显存
+  random_state: 3407 # 随机种子
+  use_rslora: True # 使用 Rank-Stabilized LoRA
+  loftq_config: None # 不使用 LoFTQ
+
+#系统级提示词
+system_prompt: |
+  """
+  你是一个医美客服，你需要在多轮对话场景中识别用户场景,目前的场景为：{scence}
+  经过深思熟虑之后给出简短有力而亲切的回答，思考和回答的时间越短越好，最好是一句话
+  """
+
+  #提示词模版
+alpaca_prompt: |
+  """
+
+  ###instruction
+  {}
+  ###conversation_history
+  {}
+  ###customer_input
+  用户：{}
+  ###service_output
+  客服：{}
+  """
+
+qwen_prompt: |
+  """
+  <|im_start|>system:
+  {}<|im_end|>
+  <|im_start|>user:
+  {}<|im_end|>
+  <|im_start|>assistant:
+  {}<|im_end|>
+  """
+
+qwen_prompt_output: |
+  """
+  <|im_start|>system:
+  {}<|im_end|>
+  <|im_start|>histroy:
+  {}<|im_end|>
+  <|im_start|>user:
+  {}<|im_end|>
+  """
+
+test_list:
+  [
+    "明天的热玛吉还有位置吗",
+    "你们的医生有经过认证吗",
+    "我明天没空，帮我把明天的瘦脸延后到明天",
+    "你们服务态度怎么这样，我要投诉你们了",
+    "额我做完手术之后脸有点疼还有点胀胀的怎么回事",
+    "这个热玛吉最近有优惠吗",
+    "我要人工客服，给我转接人工客服",
+    "今天天气怎么样？",
+  ]
+
