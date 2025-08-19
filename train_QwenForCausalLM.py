@@ -155,7 +155,6 @@ try:
         process,
         remove_columns=[
             'conversation_id', 'system_prompt', 'conversation_pair',
-            'conversation id', 'system prompt', 'conversation pair'
         ]
     )
     logger.info("数据处理成功")

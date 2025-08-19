@@ -117,17 +117,17 @@ model = PeftModel.from_pretrained(model, model_id=lora_path)
 
 
 conversation_pair = [
-    {"role": "user", "content": "脱毛"},
+    {"role": "user", "content": "脱一下毛"},
     {"role": "assistant", "thinking": "询问改善部位", "content": "您好～了解哪个部位的脱毛呢"},
-    {"role": "user", "content": "大小腿"},
+    {"role": "user", "content": "大腿和小腿"},
     {"role": "assistant", "thinking": "询问改善时间", "content": "可以的，您是想什么时候脱呢 我给您预约一下"},
-    {"role": "user", "content": "是激光的吗？大概要做几次"},
+    {"role": "user", "content": "大概要做几次，是不是激光的吗？"},
     {"role": "assistant", "thinking": "给出解答，探索顾客意向时间", "content": "冰点脱毛呢，要看您的毛发旺盛程度 有的人 两三次 有的五六次，\n一般脱干净了 就不会再长了，您是想什么时候脱呢"},
-    {"role": "user", "content": "遗传的比较旺盛的呢？能脱得干净吗？"},
+    {"role": "user", "content": "我这种腿毛比较旺盛的呢？能脱得干净吗？"},
     {"role": "assistant", "thinking": "解答问题，消除顾客疑虑", "content": "都能脱干净 就是次数问题，一次比一次更稀疏"},
-    {"role": "user", "content": "方便透露一下是什么价格嘛？"},
+    {"role": "user", "content": "明天我能去吗"},
     {"role": "assistant", "thinking": "套电", "content": "可以呀 方便加您个联系方式吗"},
-    {"role": "user", "content": "13169987747"},
+    {"role": "user", "content": "13156654334"},
     {"role": "assistant", "thinking": "", "content": "好的呢"}
 ]
 
@@ -191,8 +191,13 @@ def test_from_pre(conversation_pair:list):
             print("="*50)
             print("\n")
 
+
+# 在函数外部定义 history 变量，使其在多次调用之间保持状态
+history = []  # 用列表保存完整对话
+
 def test_from_user(user_input:str):
-    history = []  #  用列表保存完整对话
+    global history
+    # print(history)
 
     system_prompt = config['system_prompt']
 
@@ -210,7 +215,7 @@ def test_from_user(user_input:str):
     ).to("cuda")
 
     gen_kwargs = {
-        "max_length": 2048,
+        "max_length": 4096,
         "do_sample": True,
         "top_k": 1,
         "top_p": 0.9,
@@ -243,6 +248,8 @@ def test_from_user(user_input:str):
 
         print("="*50)
         print("\n")
+
+
 
 if __name__ == '__main__':
     # test_from_pre(conversation_pair=conversation_pair)
