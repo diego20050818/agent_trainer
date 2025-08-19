@@ -2,7 +2,7 @@ from utils.logger import logger,TrainingLogCallback
 import sys
 import datetime
 current_time = datetime.datetime.now().strftime("%Y%m%d%H%M") 
-logger.info(f"========{__name__}  {current_time}========")
+logger.info(f"========train Qwen2ForCausalLM  {current_time}========")
 logger.info(f"当前环境：{sys.executable}")
 logger.info("开始进行训练")
 

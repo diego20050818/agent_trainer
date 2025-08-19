@@ -84,7 +84,7 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 # 控制台处理器（逐字 + 彩色）
-typing_handler = TypingConsoleHandler(sys.stdout, delay=0.03)  # 控制每个字母的延迟
+typing_handler = TypingConsoleHandler(sys.stdout, delay=0)  # 控制每个字母的延迟
 console_formatter = ColoredFormatter(
     "%(log_color)s>>> %(asctime)s - %(levelname)-8s - %(module)s:%(funcName)s:%(lineno)d - %(message)s",
     datefmt="%M:%S",

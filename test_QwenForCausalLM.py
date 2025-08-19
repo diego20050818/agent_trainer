@@ -100,9 +100,9 @@ def search_latest_checkpoint(output_dir):
 base_output_dir = config['file_load']['lora_output_path']
 selected_model_path,selected_folder = select_training_model(base_output_dir)
 
-if not str(selected_folder).lower().startswith("qwen"):
-    logger.error("你选了一个不是qwen的模型，接下来可能会报错")
-    raise ValueError("xd这是个qwen测试文件")
+# if not str(selected_folder).lower().startswith("qwen"):
+#     logger.error("你选了一个不是qwen的模型，接下来可能会报错")
+#     raise ValueError("xd这是个qwen测试文件")
 
 lora_path = search_latest_checkpoint(selected_model_path)
 
@@ -132,13 +132,68 @@ conversation_pair = [
 ]
 
 
+def test_from_pre(conversation_pair:list):
+    history = []  #  用列表保存完整对话
 
-history = []  #  用列表保存完整对话
+    for i in range(1, len(conversation_pair), 2):  # 每轮assistant
+        user_input = conversation_pair[i-1]["content"]
+        real_think = conversation_pair[i].get("thinking", "")
+        real_content = conversation_pair[i]["content"]
+        system_prompt = config['system_prompt']
 
-for i in range(1, len(conversation_pair), 2):  # 每轮assistant
-    user_input = conversation_pair[i-1]["content"]
-    real_think = conversation_pair[i].get("thinking", "")
-    real_content = conversation_pair[i]["content"]
+        # 把历史对话 + 当前输入一起构造
+        history.append({"role": "user", "content": user_input})
+
+        messages = [{"role": "system", "content": system_prompt}] + history
+
+        inputs = tokenizer.apply_chat_template(
+            conversation=messages,
+            add_generation_prompt=True,
+            tokenize=True,
+            return_tensors="pt",
+            return_dict=True
+        ).to("cuda")
+
+        gen_kwargs = {
+            "max_length": 2048,
+            "do_sample": True,
+            "top_k": 1,
+            "top_p": 0.9,
+            "temperature": 0.2
+        }
+
+        with torch.no_grad():
+            print("="*50)
+            print("用户输入:")
+            print(user_input)
+            print("模型输出:<think>", end='', flush=True)
+
+            # 使用 TextStreamer 实现流式打印
+            streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
+
+            output_ids = model.generate(
+                **inputs,
+                **gen_kwargs,
+                streamer=streamer
+            )
+
+            # 解析生成的内容（只截取生成部分）
+            generated_text = tokenizer.decode(
+                output_ids[0][inputs['input_ids'].shape[1]:],
+                skip_special_tokens=True
+            ).strip()
+
+            # 把模型回答加进 history，供后续轮次使用
+            history.append({"role": "assistant", "content": generated_text})
+
+            print("\n\n样本真实思维链 + 输出:")
+            print(f"<think>{real_think}</think> \n{real_content}")
+            print("="*50)
+            print("\n")
+
+def test_from_user(user_input:str):
+    history = []  #  用列表保存完整对话
+
     system_prompt = config['system_prompt']
 
     # 把历史对话 + 当前输入一起构造
@@ -166,7 +221,7 @@ for i in range(1, len(conversation_pair), 2):  # 每轮assistant
         print("="*50)
         print("用户输入:")
         print(user_input)
-        print("模型输出:<think>", end='', flush=True)
+        print("模型输出:", end='', flush=True)
 
         # 使用 TextStreamer 实现流式打印
         streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
@@ -186,8 +241,19 @@ for i in range(1, len(conversation_pair), 2):  # 每轮assistant
         # 把模型回答加进 history，供后续轮次使用
         history.append({"role": "assistant", "content": generated_text})
 
-        print("\n\n样本真实思维链 + 输出:")
-        print(f"<think>{real_think}</think> \n{real_content}")
         print("="*50)
         print("\n")
 
+if __name__ == '__main__':
+    # test_from_pre(conversation_pair=conversation_pair)
+
+    while True:
+
+        user_input = input("用户：")
+
+        import sys
+        if user_input.strip().lower() == 'q':
+            print("对话将终止，明天见！")
+            break
+
+        test_from_user(user_input)
