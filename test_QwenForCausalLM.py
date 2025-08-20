@@ -4,10 +4,10 @@ from transformers import TextStreamer
 import torch
 from peft import PeftModel
 
-import os
-import re
 from utils.logger import logger
+from utils.search_checkpoint import select_training_model,search_latest_checkpoint
 # from loguru import logger
+
 import sys
 import datetime
 current_time = datetime.datetime.now().strftime("%Y%m%d%H%M") 
@@ -30,79 +30,12 @@ with open('config.yaml', 'r') as f:
     config = yaml.load(f)           # 导入配置文件config.yaml
 
 # mode_path = "/home/liangshuqiao/models/DeepSeek-R1-Distill-Qwen-7B"
+
 mode_path = config['file_load']['model_path']
-def list_training_outputs(output_dir):
-    """列出output目录下的所有训练输出文件夹"""
-    try:
-        # 获取output目录下的所有文件夹
-        training_folders = [
-            d for d in os.listdir(output_dir)
-            if os.path.isdir(os.path.join(output_dir, d))
-        ]
-        
-        if not training_folders:
-            logger.error(f"在 {output_dir} 目录下没有找到训练输出文件夹!")
-            raise ValueError("没有找到训练输出文件夹!")
-            
-        return training_folders
-    except FileNotFoundError:
-        logger.error(f"目录 {output_dir} 不存在!")
-        raise
-
-def select_training_model(output_dir):
-    """通过终端交互让用户选择要测试的训练模型"""
-    training_folders = list_training_outputs(output_dir)
-    
-    print("可用的训练模型文件夹:")
-    for i, folder in enumerate(training_folders, 1):
-        print(f"{i}. {folder}")
-    
-    while True:
-        try:
-            choice = input(f"\n请选择要测试的模型 (1-{len(training_folders)}): ")
-            choice_idx = int(choice) - 1
-            
-            if 0 <= choice_idx < len(training_folders):
-                selected_folder = training_folders[choice_idx]
-                selected_path = os.path.join(output_dir, selected_folder)
-                logger.info(f"已选择模型文件夹: {selected_folder}")
-                return selected_path,selected_folder
-            else:
-                print(f"请输入有效的选项 (1-{len(training_folders)})")
-        except ValueError:
-            print("请输入有效的数字")
-        except KeyboardInterrupt:
-            print("\n用户取消选择")
-            raise
-
-def search_latest_checkpoint(output_dir):
-    # 获取所有 checkpoint 文件夹
-    checkpoints = [
-        d for d in os.listdir(output_dir)
-        if os.path.isdir(os.path.join(output_dir, d)) and re.match(r'checkpoint-\d+', d)
-    ]
-
-    if not checkpoints:
-        logger.error("没有找到 checkpoint 文件夹!")
-        raise ValueError("没有找到 checkpoint 文件夹!")
-
-    # 按编号排序，找到最大的
-    latest_checkpoint = max(
-        checkpoints,
-        key=lambda x: int(re.search(r'checkpoint-(\d+)', x).group(1))
-    )
-
-    lora_path = os.path.join(output_dir, latest_checkpoint)
-    logger.info(f"最新的 LoRA checkpoint 路径:{lora_path}")
-    return lora_path
-
 # 交互式选择模型
 base_output_dir = config['file_load']['lora_output_path']
 selected_model_path,selected_folder = select_training_model(base_output_dir)
 
-# if not str(selected_folder).lower().startswith("qwen"):
-#     logger.error("你选了一个不是qwen的模型，接下来可能会报错")
-#     raise ValueError("xd这是个qwen测试文件")
 
 lora_path = search_latest_checkpoint(selected_model_path)
 
@@ -133,6 +66,16 @@ conversation_pair = [
 
 
 def test_from_pre(conversation_pair:list):
+    """从预设的问答对来测试模型表现
+    
+    Args:
+        conversation_pair (list): 问答对
+
+    Examples:
+        >>> {"role": "assistant", "thinking": "", "content": "好的呢"}
+        >>> {"role": "user", "content": "13156654334"},
+
+    """
     history = []  #  用列表保存完整对话
 
     for i in range(1, len(conversation_pair), 2):  # 每轮assistant
@@ -196,6 +139,11 @@ def test_from_pre(conversation_pair:list):
 history = []  # 用列表保存完整对话
 
 def test_from_user(user_input:str):
+    """用户输入以获取模型输出，主观评价
+
+    Args:
+        user_input (str): 用户输入字符
+    """
     global history
     # print(history)
 
@@ -252,15 +200,15 @@ def test_from_user(user_input:str):
 
 
 if __name__ == '__main__':
-    # test_from_pre(conversation_pair=conversation_pair)
+    test_from_pre(conversation_pair=conversation_pair)
 
-    while True:
+    # while True:
 
-        user_input = input("用户：")
+    #     user_input = input("用户：")
 
-        import sys
-        if user_input.strip().lower() == 'q':
-            print("对话将终止，明天见！")
-            break
+    #     import sys
+    #     if user_input.strip().lower() == 'q':
+    #         print("对话将终止，明天见！")
+    #         break
 
-        test_from_user(user_input)
+    #     test_from_user(user_input)

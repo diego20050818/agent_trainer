@@ -4,6 +4,12 @@ env/
 dataset/
 model_output/
 output/
+clean_env/
+test.ipynb
+trainlog/
+.venv/
+.vscode/
+
 agent-fine-tuning-trainer/output/Qwen2.5_instruct_lora/checkpoint-100/adapter_config.json
 agent-fine-tuning-trainer/output/Qwen2.5_instruct_lora/checkpoint-100/adapter_model.safetensors
 agent-fine-tuning-trainer/output/Qwen2.5_instruct_lora/checkpoint-100/optimizer.pt

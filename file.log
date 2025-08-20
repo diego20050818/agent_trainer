@@ -2397,3 +2397,93 @@
 >>> 2025-08-19 20:47:13,937 - INFO - 开始进行原始模型对话测试
 >>> 2025-08-19 20:47:14,385 - INFO - 导入包完成
 >>> 2025-08-19 20:47:14,400 - INFO - 配置文件读取完成
+>>> 2025-08-19 23:25:47,328 - INFO - 开始进行原始模型对话测试
+>>> 2025-08-19 23:25:50,035 - INFO - 导入包完成
+>>> 2025-08-19 23:25:50,052 - INFO - 配置文件读取完成
+>>> 2025-08-19 23:27:50,126 - INFO - ========__main__  202508192327========
+>>> 2025-08-19 23:27:50,127 - INFO - 当前环境：/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/env/bin/python
+>>> 2025-08-19 23:27:50,127 - INFO - 开始进行模型测试
+>>> 2025-08-19 23:27:55,230 - INFO - 已选择模型文件夹: qwen202508191333
+>>> 2025-08-19 23:27:55,233 - INFO - 最新的 LoRA checkpoint 路径:output/qwen202508191333/checkpoint-100
+>>> 2025-08-19 23:28:23,077 - INFO - ========__main__  202508192328========
+>>> 2025-08-19 23:28:23,077 - INFO - 当前环境：/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/env/bin/python
+>>> 2025-08-19 23:28:23,078 - INFO - 开始进行模型测试
+>>> 2025-08-19 23:28:32,633 - INFO - 已选择模型文件夹: qwen202508191333
+>>> 2025-08-19 23:28:32,636 - INFO - 最新的 LoRA checkpoint 路径:output/qwen202508191333/checkpoint-100
+>>> 2025-08-20 15:00:03,722 - INFO - ========__main__  202508201500========
+>>> 2025-08-20 15:00:03,723 - INFO - 当前环境：/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/clean_env/bin/python
+>>> 2025-08-20 15:00:03,725 - INFO - 开始进行模型测试
+>>> 2025-08-20 15:00:15,032 - INFO - 已选择模型文件夹: qwen202508191333
+>>> 2025-08-20 15:00:15,035 - INFO - 最新的 LoRA checkpoint 路径:output/qwen202508191333/checkpoint-100
+>>> 2025-08-20 19:36:00,672 - INFO - 正在读取配置文件: config.yaml
+>>> 2025-08-20 19:36:00,678 - INFO - 从配置文件中提取到模型路径: /home/liangshuqiao/models/gpt-oss
+>>> 2025-08-20 19:36:00,678 - INFO - 开始加载模型配置文件...
+>>> 2025-08-20 19:36:00,678 - INFO - 正在加载模型: /home/liangshuqiao/models/gpt-oss
+>>> 2025-08-20 19:36:33,567 - ERROR - 加载模型时出错: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 31.73 GiB of which 430.19 MiB is free. Including non-PyTorch memory, this process has 31.31 GiB memory in use. Of the allocated memory 28.10 GiB is allocated by PyTorch, and 2.85 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+>>> 2025-08-20 19:36:34,642 - ERROR - 无法获取模型信息
+>>> 2025-08-20 20:04:45,769 - INFO - 导入包完成
+>>> 2025-08-20 20:04:45,769 - INFO - ========train Qwen2ForCausalLM  202508202004========
+>>> 2025-08-20 20:04:45,770 - INFO - 当前环境：/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/clean_env/bin/python
+>>> 2025-08-20 20:04:45,770 - INFO - 开始进行训练
+>>> 2025-08-20 20:04:45,784 - INFO - 配置文件读取完成
+>>> 2025-08-20 20:04:45,784 - INFO - 数据集路径：dataset/own/Medical_20250816.json
+>>> 2025-08-20 20:04:45,785 - INFO - 模型路径:/home/liangshuqiao/models/qwen3-8b
+>>> 2025-08-20 20:04:46,272 - INFO - tokenizer读取完成
+>>> 2025-08-20 20:04:49,613 - INFO - model dtype:torch.float16
+>>> 2025-08-20 20:04:49,613 - INFO - 模型导入完成
+>>> 2025-08-20 20:04:49,614 - INFO - 数据读取开始
+>>> 2025-08-20 20:04:50,853 - INFO - 数据下载完成
+>>> 2025-08-20 20:05:10,687 - INFO - 开始训练！
+>>> 2025-08-20 20:05:10,688 - INFO - 批次大小  : 8
+>>> 2025-08-20 20:05:10,688 - INFO - 训练轮数  : 100
+>>> 2025-08-20 20:05:10,688 - INFO - 学习率    : 0.0001
+>>> 2025-08-20 20:05:10,689 - INFO - 数据集路径: dataset/own/Medical_20250816.json
+>>> 2025-08-20 20:05:10,689 - INFO - 模型路径  : /home/liangshuqiao/models/qwen3-8b
+>>> 2025-08-20 20:19:19,622 - INFO - 导入包完成
+>>> 2025-08-20 20:19:19,623 - INFO - ========train Qwen2ForCausalLM  202508202019========
+>>> 2025-08-20 20:19:19,623 - INFO - 当前环境：/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/clean_env/bin/python
+>>> 2025-08-20 20:19:19,624 - INFO - 开始进行训练
+>>> 2025-08-20 20:19:19,636 - INFO - 基础配置文件读取完成
+>>> 2025-08-20 20:19:19,643 - INFO - 训练配置读取完成
+>>> 2025-08-20 20:19:19,644 - INFO - 数据集路径：dataset/own/Medical_20250816.json
+>>> 2025-08-20 20:19:19,644 - INFO - 模型路径:/home/liangshuqiao/models/qwen3-8b
+>>> 2025-08-20 20:19:20,105 - INFO - tokenizer读取完成
+>>> 2025-08-20 20:19:22,238 - INFO - model dtype:torch.float16
+>>> 2025-08-20 20:19:22,238 - INFO - 模型导入完成
+>>> 2025-08-20 20:19:22,239 - INFO - 数据读取开始
+>>> 2025-08-20 20:19:23,185 - INFO - 数据下载完成
+>>> 2025-08-20 20:19:27,384 - INFO - 数据映射完成
+>>> 2025-08-20 20:21:49,418 - INFO - 导入包完成
+>>> 2025-08-20 20:21:49,418 - INFO - ========train Qwen2ForCausalLM  202508202021========
+>>> 2025-08-20 20:21:49,419 - INFO - 当前环境：/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/clean_env/bin/python
+>>> 2025-08-20 20:21:49,419 - INFO - 开始进行训练
+>>> 2025-08-20 20:21:49,432 - INFO - 基础配置文件读取完成
+>>> 2025-08-20 20:21:49,439 - INFO - 训练配置读取完成
+>>> 2025-08-20 20:21:49,440 - INFO - 数据集路径：dataset/own/Medical_20250816.json
+>>> 2025-08-20 20:21:49,440 - INFO - 模型路径:/home/liangshuqiao/models/qwen3-8b
+>>> 2025-08-20 20:21:49,902 - INFO - tokenizer读取完成
+>>> 2025-08-20 20:21:52,101 - INFO - model dtype:torch.float16
+>>> 2025-08-20 20:21:52,102 - INFO - 模型导入完成
+>>> 2025-08-20 20:21:52,102 - INFO - 数据读取开始
+>>> 2025-08-20 20:21:53,106 - INFO - 数据下载完成
+>>> 2025-08-20 20:21:57,272 - INFO - 数据映射完成
+>>> 2025-08-20 20:22:55,276 - INFO - 导入包完成
+>>> 2025-08-20 20:22:55,277 - INFO - ========train Qwen2ForCausalLM  202508202022========
+>>> 2025-08-20 20:22:55,277 - INFO - 当前环境：/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/clean_env/bin/python
+>>> 2025-08-20 20:22:55,278 - INFO - 开始进行训练
+>>> 2025-08-20 20:22:55,291 - INFO - 基础配置文件读取完成
+>>> 2025-08-20 20:22:55,298 - INFO - 训练配置读取完成
+>>> 2025-08-20 20:22:55,298 - INFO - 数据集路径：dataset/own/Medical_20250816.json
+>>> 2025-08-20 20:22:55,299 - INFO - 模型路径:/home/liangshuqiao/models/qwen3-8b
+>>> 2025-08-20 20:22:55,760 - INFO - tokenizer读取完成
+>>> 2025-08-20 20:22:57,819 - INFO - model dtype:torch.float16
+>>> 2025-08-20 20:22:57,820 - INFO - 模型导入完成
+>>> 2025-08-20 20:22:57,820 - INFO - 数据读取开始
+>>> 2025-08-20 20:22:58,595 - INFO - 数据下载完成
+>>> 2025-08-20 20:23:02,785 - INFO - 数据映射完成
+>>> 2025-08-20 20:23:15,086 - INFO - 开始训练！
+>>> 2025-08-20 20:23:15,087 - INFO - 批次大小  : 8
+>>> 2025-08-20 20:23:15,087 - INFO - 训练轮数  : 100
+>>> 2025-08-20 20:23:15,087 - INFO - 学习率    : 0.0001
+>>> 2025-08-20 20:23:15,088 - INFO - 数据集路径: dataset/own/Medical_20250816.json
+>>> 2025-08-20 20:23:15,088 - INFO - 模型路径  : /home/liangshuqiao/models/qwen3-8b

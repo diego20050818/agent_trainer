@@ -1,0 +1,32 @@
+task_type: CAUSAL_LM
+dtype: torch.float16
+load_in_4bit: True #是否加载为4bit
+batch_size: 8 #批处理大小
+gradient_accumulator_steps: 8 #梯度累积步数
+warmup_steps: 1
+epoch: 100 #训练轮数（一般比无监督短很多，10次完整遍历数据即可）
+eval_steps: 10
+learning_rate: 1e-4
+lr_scheduler_type: cosine #学习率调度类型:constant常数  linear线性衰减  cosine余弦退火  cosine_with_restarts余弦退火与重启  polynomial多项式衰减
+max_seq_length: 4096
+use_history: False #是否在微调过程中启用多轮对话
+
+#以下参数除非你自己知道你在干嘛不然就默认
+r: 8    #秩 表示n维的低秩举证来近似全参数更新（经验值4,8,16）
+interface_mode: False
+target_modules: [ #用来做低秩适应的层
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj",
+    "gate_proj",
+    "up_proj",
+    "down_proj",
+  ] # 目标模块
+lora_alpha: 16 # 缩放因子
+lora_dropout: 0.1 # dropout
+bias: "none" # 不调整偏置
+use_gradient_checkpointing: "unsloth" # 启用梯度检查点，进一步节省显存
+random_state: 3407 # 随机种子
+use_rslora: True # 使用 Rank-Stabilized LoRA
+loftq_config: None # 不使用 LoFTQ
