@@ -110,6 +110,64 @@ class dataset_loder:
             "attention_mask": attention_mask,
             "labels": labels
         }
+
+    def process_gpt(self,example):
+        """针对gpt-oss的多轮对话映射函数，注意这个函数并不会处理think块
+
+        Args:
+            example (_type_): 传入dataset.map函数默认
+        """
+        max_length = self.maxlength
+        BOS = self.bos
+        EOS = self.eos
+        tokenizer = self.tokenizer
+
+        system_prompt = (
+            example['system_prompt'] 
+            if example['system_prompt'] is not None 
+            else "你是一个医美客服助手，请根据用户问题做出回答"
+        )
+        system_prompt = system_prompt.format("新用户套电")
+        conversation_pair = example['conversation_pair']
+
+        input_ids, labels = [], []
+
+        # 添加system prompt
+        sys_text = f"{BOS}system:{system_prompt}{EOS}"
+        sys_tokens = tokenizer.encode(sys_text, add_special_tokens=False)
+        input_ids.extend(sys_tokens)
+        labels.extend([-100] * len(sys_tokens))
+
+        if conversation_pair is not None:
+            # 遍历对话
+            for turn in conversation_pair:
+                if turn["role"] == "user":
+                    text = f"{BOS}用户：{turn['content']}{EOS}"
+                    tokens = tokenizer.encode(text, add_special_tokens=False)
+                    input_ids.extend(tokens)
+                    labels.extend([-100] * len(tokens))   # 用户部分不学习
+
+                elif turn["role"] == "assistant":
+
+                    # 助手最终回复 -> 要作为 label
+                    resp_text = f"{BOS}助手回复：{turn['content']}{EOS}"
+                    resp_tokens = tokenizer.encode(resp_text, add_special_tokens=False)
+                    input_ids.extend(resp_tokens)
+                    labels.extend(resp_tokens)  # 学习助手回复
+
+        # 截断
+        input_ids = input_ids[:max_length]
+        labels = labels[:max_length]
+
+        # attention mask: 1表示有效token
+        attention_mask = [1] * len(input_ids)
+
+        return {
+            "input_ids": input_ids,
+            "attention_mask": attention_mask,
+            "labels": labels
+        }
+
     
     def dataset_map(self,fuc,remove_columns:list) -> Dataset:
         """对数据集进行映射

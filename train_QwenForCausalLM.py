@@ -6,15 +6,13 @@ Returns:
 import sys
 import datetime
 
-from datasets import Dataset, load_dataset
-import pandas as pd
 from transformers import AutoTokenizer, AutoModelForCausalLM, DataCollatorForSeq2Seq, TrainingArguments, Trainer, GenerationConfig
 from ruamel.yaml import YAML
-from rich import print as rprint
 import torch
 
 from utils.load_dataset import dataset_loder
 from utils.logger import logger,TrainingLogCallback
+from utils.tools import train_arg_printer,generate_outputdir
 
 logger.info("导入包完成")
 
@@ -24,7 +22,7 @@ logger.info(f"当前环境：{sys.executable}")
 logger.info("开始进行训练")
 
 config_path = 'config.yaml'
-train_arg = 'train_arg/qwen.yaml'
+train_arg = 'train_arg/qwen3-8b.yaml'
 # 读取配置文件config.yaml
 yaml = YAML()
 with open('config.yaml', 'r') as f:
@@ -116,14 +114,13 @@ lora_config = LoraConfig(
     lora_dropout=train_arg['lora_dropout']  # Dropout 比例
 )
 
-print(lora_config)
+train_arg_printer(train_arg)
 model = get_peft_model(model, lora_config)
 model.print_trainable_parameters()
 
 # 生成带时间戳的输出目录
-current_time = datetime.datetime.now().strftime("%Y%m%d%H%M")
 model_name = config['file_load']['model_name']
-output_dir = f"./output/{model_name}{current_time}"
+output_dir = generate_outputdir(model_name)
 
 # 从配置文件获取训练参数
 training_args = TrainingArguments(
