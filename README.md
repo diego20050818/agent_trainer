@@ -205,6 +205,13 @@ class data_loder:
 后续也可以尝试使用`getattr(data_loader,config['map_fuc'])`这一类方式也把映射函数放进yaml配置文件中显式配置
 - 参数配置好之后直接`python train_gpt.py`即可
 
+## 实时查看你的训练
+使用`tensorboard`，在`config.yaml`中设置log文件夹，默认为`trainlog`,在命令行中输入：
+```bash
+tensorboard --logdir trainlog
+```
+就可以在`http://localhost:6006`中查看训练过程，注意，如果是autodl之类的服务器，记得转发端口到本机，如果是学校的v100服务器，在vscode中的插件商城中搜索tensorboard，输入以上命令后vscode右下角提示在编辑器中打开简易浏览器，在vscode中查看即可（因为学校服务器转发端口比较麻烦，而且特别是tensorboard这种转发容易被管理员抓去喝茶）
+
 ### 评估
 每个评估脚本都是差不多的，都会从配置文件中读取你的模型，并且遍历你的lora输出文件夹，并让你选择需要评估什么模型。
 **也就是说，如果你的基础模型是qwen3,但是你选择了gpt的lora文件夹，就有可能会报错，而且这里我没有写检查**
@@ -230,4 +237,11 @@ if __name__ == '__main__':
     #     test_from_user(user_input)
 
 ```
+
+# TODOlist
+- 不以训练框架分训练脚本，将目前的`train_gpt`改为通用训练脚本，删除`train_qwen`脚本（两个脚本之间的重复性太高）
+- 将硬编码进映射函数的相关场景键值改为智能识别数据集是否有键值，并配置缺省值
+- 添加`gemma/deepseekv3.1`等更多模型的支持
+- 添加量化脚本
+- 添加`vllm`部署脚本
 
