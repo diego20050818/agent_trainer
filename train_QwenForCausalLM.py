@@ -35,6 +35,12 @@ logger.info("训练配置读取完成")
 
 # 从配置文件获取路径
 dataset_path = config['file_load']['dataset_path']
+
+eval_dataset_path = None
+if config['file_load']['use_eval']:
+    eval_dataset_path = config['file_load']['eval_dataset_path']
+    logger.info("已启用验证数据集")
+
 model_path = config['file_load']['model_path']
 logger.info(f"数据集路径：{dataset_path}")
 logger.info(f"模型路径:{model_path}")
@@ -47,7 +53,7 @@ try:
         use_fast=False,
         trust_remote_code=False
     )
-    tokenizer.padding_side = 'right'  # 根据模型特性从右边开始填充
+    tokenizer.padding_side = 'right'  # 根据 模型特性从右边开始填充
     logger.info("tokenizer读取完成")
 except Exception as e:
     logger.error(f"分词表导入失败：{e}")
@@ -81,18 +87,23 @@ special_tokens = {
 
 dataset_loder = dataset_loder(
     dataset_path=dataset_path,
+    eval_dataset_path=eval_dataset_path,
     dataset_class='json',
     max_length=train_arg['max_seq_length'],
     tokenizer=tokenizer,
     **special_tokens
 )
+
 dataset = dataset_loder.dataset_map(
-    dataset_loder.process_qwen,
-    remove_columns=[
-            'conversation_id', 'system_prompt', 'conversation_pair',
-        ]
+    dataset_loder.process_qwen_Psy,
 )
 
+eval_dataset = None
+if eval_dataset_path is not None:
+    eval_dataset = dataset_loder.dataset_map(
+        dataset_loder.process_qwen_Psy,
+    )
+    logger.info("验证数据集处理完成")
 
 
 """
@@ -133,11 +144,19 @@ training_args = TrainingArguments(
     learning_rate=float(train_arg['learning_rate']),
     save_on_each_node=True,
     gradient_checkpointing=train_arg['use_gradient_checkpointing'] != "none",
+
+    # 智能添加评估相关参数
+    # evaluation_strategy="steps" if config['file_load']['use_eval'] else "no",
+    eval_steps=train_arg.get('eval_steps', 10) if config['file_load']['use_eval'] else None,
+    per_device_eval_batch_size=train_arg['batch_size'] if config['file_load']['use_eval'] else None,
+    eval_accumulation_steps=train_arg.get('eval_accumulation_steps', 1) if config['file_load']['use_eval'] else None,
+
     # 添加这些参数以避免meta tensor问题
     remove_unused_columns=True,
     dataloader_pin_memory=False,
     lr_scheduler_type=train_arg['lr_scheduler_type'],
     warmup_steps=train_arg['warmup_steps'],
+
      # 添加日志相关参数
     logging_dir=config['file_load']['logging_path'],  # 日志目录
     logging_strategy="steps",  # 按步骤记录日志
@@ -149,17 +168,13 @@ trainer = Trainer(
     model=model,
     args=training_args,
     train_dataset=dataset,
+    eval_dataset=eval_dataset,
     data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer, padding=True),
     callbacks=[TrainingLogCallback()]
 )
 
 logger.info("开始训练！")
 try:
-    logger.info(f"批次大小  : {train_arg['batch_size']}")
-    logger.info(f"训练轮数  : {train_arg['epoch']}")
-    logger.info(f"学习率    : {train_arg['learning_rate']}")
-    logger.info(f"数据集路径: {dataset_path}")
-    logger.info(f"模型路径  : {model_path}")
     trainer.train()
     logger.info("训练成功！")
     logger.info(f"模型存放位置：{output_dir}")

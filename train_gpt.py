@@ -10,7 +10,7 @@ from utils.logger import logger,TrainingLogCallback
 from utils.load_dataset import dataset_loder
 from utils.tools import train_arg_printer,generate_outputdir
 
-logger.info("==========gpt oss模型微调脚本启动==========")
+logger.info("==========模型微调脚本启动==========")
 logger.info("模块导入完成")
 
 # ====== 导入配置 =======
@@ -89,6 +89,7 @@ training_args = TrainingArguments(
     learning_rate=float(train_arg['learning_rate']),
     save_on_each_node=True,
     gradient_checkpointing=train_arg['use_gradient_checkpointing'] != "none",
+    # gradient_checkpointing=train_arg['use_gradient_checkpointing'],
     # 添加这些参数以避免meta tensor问题
     remove_unused_columns=True,
     dataloader_pin_memory=False,
