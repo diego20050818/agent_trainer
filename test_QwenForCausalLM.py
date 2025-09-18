@@ -80,7 +80,7 @@ def test_from_pre(conversation_pair:list):
 
     for i in range(1, len(conversation_pair), 2):  # 每轮assistant
         user_input = conversation_pair[i-1]["content"]
-        real_think = conversation_pair[i].get("thinking", "")
+        # real_think = conversation_pair[i].get("thinking", "")
         real_content = conversation_pair[i]["content"]
         system_prompt = config['system_prompt']
 
@@ -94,12 +94,13 @@ def test_from_pre(conversation_pair:list):
             add_generation_prompt=True,
             tokenize=True,
             return_tensors="pt",
-            return_dict=True
+            return_dict=True,
+            enable_thinking=False   #开启思维链
         ).to("cuda")
 
         gen_kwargs = {
-            "max_length": 2048,
-            "do_sample": True,
+            "max_length": 4096,
+            "do_sample": False,
             "top_k": 1,
             "top_p": 0.9,
             "temperature": 0.2
@@ -109,7 +110,7 @@ def test_from_pre(conversation_pair:list):
             print("="*50)
             print("用户输入:")
             print(user_input)
-            print("模型输出:<think>", end='', flush=True)
+            print("模型输出:", end='', flush=True)
 
             # 使用 TextStreamer 实现流式打印
             streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
@@ -130,7 +131,8 @@ def test_from_pre(conversation_pair:list):
             history.append({"role": "assistant", "content": generated_text})
 
             print("\n\n样本真实思维链 + 输出:")
-            print(f"<think>{real_think}</think> \n{real_content}")
+            # print(f"<think>{real_think}</think> \n{real_content}")
+            print(f"\n{real_content}")
             print("="*50)
             print("\n")
 
@@ -159,12 +161,13 @@ def test_from_user(user_input:str):
         add_generation_prompt=True,
         tokenize=True,
         return_tensors="pt",
-        return_dict=True
+        return_dict=True,
+        enable_thinking=False  # 关闭维链
     ).to("cuda")
 
     gen_kwargs = {
-        "max_length": 4096,
-        "do_sample": True,
+        "max_length": 4096, 
+        # "do_sample": False,    #想要查w微调效果的话就不开这z这个是采样s随机搞m没搞过的东西
         "top_k": 1,
         "top_p": 0.9,
         "temperature": 0.2
@@ -200,15 +203,19 @@ def test_from_user(user_input:str):
 
 
 if __name__ == '__main__':
-    test_from_pre(conversation_pair=conversation_pair)
+    choose = input('1-普通对话  2-预设对话:')
 
-    # while True:
+    if choose == '2':
+        test_from_pre(conversation_pair=conversation_pair)
 
-    #     user_input = input("用户：")
+    if choose == '1':
+        while True:
 
-    #     import sys
-    #     if user_input.strip().lower() == 'q':
-    #         print("对话将终止，明天见！")
-    #         break
+            user_input = input("用户：")
 
-    #     test_from_user(user_input)
+            import sys
+            if user_input.strip().lower() == 'q':
+                print("对话将终止，明天见！")
+                break
+
+            test_from_user(user_input)

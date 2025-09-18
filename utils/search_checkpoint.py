@@ -30,7 +30,7 @@ def select_training_model(output_dir:str):
     
     while True:
         try:
-            choice = input(f"\n请选择要测试的模型 (1-{len(training_folders)}): ")
+            choice = input(f"\n请选择需要的模型 (1-{len(training_folders)}): ")
             choice_idx = int(choice) - 1
             
             if 0 <= choice_idx < len(training_folders):

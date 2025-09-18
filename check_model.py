@@ -36,7 +36,7 @@ def count_parameters(model, trainable_only=False):
 
 def get_model_info(model_path):
     """获取模型详细信息"""
-    logger.info("开始加载模型配置文件...")
+    print("开始加载模型配置文件...")
     
     # 检查模型路径是否存在
     if not os.path.exists(model_path):
@@ -118,51 +118,51 @@ def print_model_info(info):
         logger.error("无法获取模型信息")
         return
     
-    logger.info("=" * 60)
-    logger.info("模型详细信息")
-    logger.info("=" * 60)
+    print("=" * 60)
+    print("模型详细信息")
+    print("=" * 60)
     
-    logger.info(f"模型路径: {info['model_path']}")
-    logger.info(f"模型类型: {info['model_type']}")
-    logger.info(f"模型架构: {info['model_architecture']}")
+    print(f"模型路径: {info['model_path']}")
+    print(f"模型类型: {info['model_type']}")
+    print(f"模型架构: {info['model_architecture']}")
     
-    logger.info("-" * 40)
-    logger.info("参数信息:")
-    logger.info(f"  总参数量: {format_number(info['total_parameters'])} ({info['total_parameters']:,})")
-    logger.info(f"  可训练参数: {format_number(info['trainable_parameters'])} ({info['trainable_parameters']:,})")
-    logger.info(f"  冻结参数: {format_number(info['non_trainable_parameters'])} ({info['non_trainable_parameters']:,})")
-    logger.info(f"  可训练参数比例: {info['trainable_ratio']:.2%}")
+    print("-" * 40)
+    print("参数信息:")
+    print(f"  总参数量: {format_number(info['total_parameters'])} ({info['total_parameters']:,})")
+    print(f"  可训练参数: {format_number(info['trainable_parameters'])} ({info['trainable_parameters']:,})")
+    print(f"  冻结参数: {format_number(info['non_trainable_parameters'])} ({info['non_trainable_parameters']:,})")
+    print(f"  可训练参数比例: {info['trainable_ratio']:.2%}")
     
-    logger.info("-" * 40)
-    logger.info("模型结构信息:")
-    logger.info(f"  层数: {info['num_hidden_layers']}")
-    logger.info(f"  隐藏层大小: {info['hidden_size']}")
-    logger.info(f"  注意力头数: {info['num_attention_heads']}")
-    logger.info(f"  总层数量: {info['total_layers']}")
-    logger.info(f"  可训练层数量: {info['trainable_layers_count']}")
+    print("-" * 40)
+    print("模型结构信息:")
+    print(f"  层数: {info['num_hidden_layers']}")
+    print(f"  隐藏层大小: {info['hidden_size']}")
+    print(f"  注意力头数: {info['num_attention_heads']}")
+    print(f"  总层数量: {info['total_layers']}")
+    print(f"  可训练层数量: {info['trainable_layers_count']}")
     
-    logger.info("-" * 40)
-    logger.info("特殊Token:")
+    print("-" * 40)
+    print("特殊Token:")
     for token_name, token_value in info['special_tokens'].items():
-        logger.info(f"  {token_name}: {token_value}")
+        print(f"  {token_name}: {token_value}")
     
-    logger.info("-" * 40)
-    logger.info("量化信息:")
-    logger.info(f"  数据类型: {info['torch_dtype']}")
-    logger.info(f"  量化方式: {info['quantization']}")
+    print("-" * 40)
+    print("量化信息:")
+    print(f"  数据类型: {info['torch_dtype']}")
+    print(f"  量化方式: {info['quantization']}")
     
-    logger.info("-" * 40)
-    logger.info("可训练层 (前10个):")
+    print("-" * 40)
+    print("可训练层 (前10个):")
     for i, layer_name in enumerate(info['trainable_layers'][:10]):
-        logger.info(f"  {i+1}. {layer_name}")
+        print(f"  {i+1}. {layer_name}")
     if len(info['trainable_layers']) > 10:
-        logger.info(f"  ... 还有 {len(info['trainable_layers']) - 10} 个可训练层")
+        print(f"  ... 还有 {len(info['trainable_layers']) - 10} 个可训练层")
 
 def main():
     """主函数"""
     # 读取配置文件
     config_path = "config.yaml"
-    logger.info(f"正在读取配置文件: {config_path}")
+    print(f"正在读取配置文件: {config_path}")
     
     try:
         with open(config_path, 'r', encoding='utf-8') as f:
@@ -173,7 +173,7 @@ def main():
             logger.error("配置文件中未找到模型路径")
             return
             
-        logger.info(f"从配置文件中提取到模型路径: {model_path}")
+        print(f"从配置文件中提取到模型路径: {model_path}")
         
         # 获取模型信息
         model_info = get_model_info(model_path)

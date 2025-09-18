@@ -5,6 +5,14 @@ from datasets import Dataset,load_dataset
 from transformers import AutoTokenizer
 from .logger import logger
 
+from ruamel.yaml import YAML
+
+config_path = '/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/config.yaml'
+yaml = YAML()
+with open(config_path,'r') as f:
+    config = yaml.load(f)
+
+
 class dataset_loder:
     """数据读取类
     """
@@ -37,21 +45,26 @@ class dataset_loder:
         # self.think = special_token.get("think")
 
 
-    def loder(self):
+
+    def loder(self,split:float=1):
         """数据集加载器
+
+        Args:
+            split (float): 训练集采样比例，取值范围(0, 1]
 
         Returns:
             _type_: 返回dataset类
         """
         dataset = load_dataset(self.dataset_class,data_files=self.dataset_path)
-        
-        if self.eval_dataset_path is not None:
-            eval_dataset = load_dataset(self.dataset_class,data_files=self.eval_dataset_path)
-            eval_dataset = eval_dataset['train']
-        
         dataset = dataset['train']
-        logger.info("数据下载完成")
+
+        # 如果split小于1，则按比例采样训练集
+        if split < 1:
+            dataset = dataset.select(range(int(len(dataset) * split)))
+            
+        logger.info(f"数据下载完成，训练集大小: {len(dataset)}")
         return dataset
+
 
     def process_qwen(self,example):
         """
@@ -70,9 +83,9 @@ class dataset_loder:
         system_prompt = (
             example['system_prompt'] 
             if example['system_prompt'] is not None 
-            else "你是一个医美客服助手，请根据用户问题做出回答"
+            else config['system_prompt']
         )
-        system_prompt = system_prompt.format("新用户套电")
+        # system_prompt = system_prompt.format("新用户套电")
         conversation_pair = example['conversation_pair']
 
         input_ids, labels = [], []
@@ -94,11 +107,11 @@ class dataset_loder:
 
                 elif turn["role"] == "assistant":
                     # 如果想保留思考过程
-                    if turn.get("thinking", ""):
-                        think_text = f"{BOS}助手思考：<think>{turn['thinking']}</think>" #因为下面还有输出，并且已经使用内置的think作为特殊token包裹所以这里没有EOS
-                        think_tokens = tokenizer.encode(think_text, add_special_tokens=False)
-                        input_ids.extend(think_tokens)
-                        labels.extend([-100] * len(think_tokens))  # 思考过程不学习
+                    # if turn.get("thinking", ""):
+                    #     think_text = f"{BOS}助手思考：<think>{turn['thinking']}</think>" #因为下面还有输出，并且已经使用内置的think作为特殊token包裹所以这里没有EOS
+                    #     think_tokens = tokenizer.encode(think_text, add_special_tokens=False)
+                    #     input_ids.extend(think_tokens)
+                    #     labels.extend([-100] * len(think_tokens))  # 思考过程不学习
 
                     # 助手最终回复 -> 要作为 label
                     resp_text = f"{BOS}助手回复：{turn['content']}{EOS}"
@@ -266,16 +279,17 @@ class dataset_loder:
         }
 
     
-    def dataset_map(self,fuc) -> Dataset:
+    def dataset_map(self,fuc,split=1) -> Dataset:
         """对数据集进行映射
 
         Args:
             fuc (fuction): 处理数据集的映射函数
+            split(float):截取数据集b百分之多j进行训练
 
         Returns:
             _type_: Dataset
         """
-        dataset = self.loder()
+        dataset = self.loder(split)
         currect_columns = ['input_ids','attention_mask','labels']
         columns = [i for i in list(dataset.column_names) if i not in currect_columns]
         dataset = dataset.map(

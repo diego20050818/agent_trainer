@@ -41,72 +41,18 @@ conversation_pair = [
 
 history = []
 # print(history)
-'''
 
-while True:
-    system_prompt = config['system_prompt']
-    user_input = input("user:")
+choose = input("1-普通对话  2-预设对话:")
 
-    if user_input.strip().lower() == 'q':
-        break
+if choose == '1':
+    while True:
+        system_prompt = config['system_prompt']
+        user_input = input("user:")
 
-    # 把历史对话 + 当前输入一起构造
-    history.append({"role": "user", "content": user_input})
+        if user_input.strip().lower() == 'q':
+            break
 
-    messages = [{"role": "system", "content": system_prompt}] + history
-
-    inputs = tokenizer.apply_chat_template(
-        conversation=messages,
-        add_generation_prompt=True,
-        tokenize=True,
-        return_tensors="pt",
-        return_dict=True
-    ).to("cuda")
-
-    gen_kwargs = {
-        "max_length": 4096,
-        "do_sample": True,
-        "top_k": 1,
-        "top_p": 0.9,
-        "temperature": 0.2
-    }
-
-    with torch.no_grad():
-        print("="*50)
-        print("用户输入:")
-        print(user_input)
-        print("模型输出:", end='', flush=True)
-
-        # 使用 TextStreamer 实现流式打印
-        streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
-
-        output_ids = model.generate(
-            **inputs,
-            **gen_kwargs,
-            streamer=streamer
-        )
-
-        # 解析生成的内容（只截取生成部分）
-        generated_text = tokenizer.decode(
-            output_ids[0][inputs['input_ids'].shape[1]:],
-            skip_special_tokens=True
-        ).strip()
-
-        # 把模型回答加进 history，供后续轮次使用
-        history.append({"role": "assistant", "content": generated_text})
-
-        print("="*50)
-        print("\n")
-'''
-
-history = []
-
-for i, pair in enumerate(conversation_pair):
-    system_prompt = config['system_prompt']
-
-    # 如果是用户轮次，触发模型生成
-    if pair["role"] == "user":
-        user_input = pair["content"]
+        # 把历史对话 + 当前输入一起构造
         history.append({"role": "user", "content": user_input})
 
         messages = [{"role": "system", "content": system_prompt}] + history
@@ -116,12 +62,13 @@ for i, pair in enumerate(conversation_pair):
             add_generation_prompt=True,
             tokenize=True,
             return_tensors="pt",
-            return_dict=True
+            return_dict=True,
+            enable_thinking=False   #开启思维链
         ).to("cuda")
 
         gen_kwargs = {
             "max_length": 4096,
-            "do_sample": True,
+            # "do_sample": True,
             "top_k": 1,
             "top_p": 0.9,
             "temperature": 0.2
@@ -129,33 +76,90 @@ for i, pair in enumerate(conversation_pair):
 
         with torch.no_grad():
             print("="*50)
-            print(f"轮次 {i//2 + 1}")
             print("用户输入:")
             print(user_input)
+            print("模型输出:", end='', flush=True)
 
-            # 模型生成
+            # 使用 TextStreamer 实现流式打印
             streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
+
             output_ids = model.generate(
                 **inputs,
                 **gen_kwargs,
                 streamer=streamer
             )
 
+            # 解析生成的内容（只截取生成部分）
             generated_text = tokenizer.decode(
                 output_ids[0][inputs['input_ids'].shape[1]:],
                 skip_special_tokens=True
             ).strip()
 
+            # 把模型回答加进 history，供后续轮次使用
             history.append({"role": "assistant", "content": generated_text})
 
-            # 找到对应的期望 assistant 回复
-            expected = None
-            if i + 1 < len(conversation_pair) and conversation_pair[i+1]["role"] == "assistant":
-                expected = conversation_pair[i+1]["content"]
+            print("="*50)
+            print("\n")
 
-            print("\n模型输出:")
-            print(generated_text)
-            if expected:
-                print("\n预计回答:")
-                print(expected)
-            print("="*50 + "\n")
+if choose == '2':
+    history = []
+
+    for i, pair in enumerate(conversation_pair):
+        system_prompt = config['system_prompt']
+
+        # 如果是用户轮次，触发模型生成
+        if pair["role"] == "user":
+            user_input = pair["content"]
+            history.append({"role": "user", "content": user_input})
+
+            messages = [{"role": "system", "content": system_prompt}] + history
+
+            inputs = tokenizer.apply_chat_template(
+                conversation=messages,
+                add_generation_prompt=True,
+                tokenize=True,
+                return_tensors="pt",
+                return_dict=True,
+                enable_thinking=False   #开启思维链
+            ).to("cuda")
+
+            gen_kwargs = {
+                "max_length": 4096,
+                "do_sample": True,
+                "top_k": 1,
+                "top_p": 0.9,
+                "temperature": 0.2
+            }
+
+            with torch.no_grad():
+                print("="*50)
+                print(f"轮次 {i//2 + 1}")
+                print("用户输入:")
+                print(user_input)
+
+                # 模型生成
+                streamer = TextStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
+                output_ids = model.generate(
+                    **inputs,
+                    **gen_kwargs,
+                    streamer=streamer
+                )
+
+                generated_text = tokenizer.decode(
+                    output_ids[0][inputs['input_ids'].shape[1]:],
+                    skip_special_tokens=True
+                ).strip()
+
+                history.append({"role": "assistant", "content": generated_text})
+
+                # 找到对应的期望 assistant 回复
+                expected = None
+                if i + 1 < len(conversation_pair) and conversation_pair[i+1]["role"] == "assistant":
+                    expected = conversation_pair[i+1]["content"]
+
+                print("\n模型输出:")
+                print(generated_text)
+                if expected:
+                    print("\n预计回答:")
+                    print(expected)
+                print("="*50 + "\n")

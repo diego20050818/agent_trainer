@@ -22,7 +22,8 @@ logger.info(f"当前环境：{sys.executable}")
 logger.info("开始进行训练")
 
 config_path = 'config.yaml'
-train_arg = 'train_arg/qwen3-8b.yaml'
+train_arg = 'train_arg/qwen2_5-14b.yaml'
+
 # 读取配置文件config.yaml
 yaml = YAML()
 with open('config.yaml', 'r') as f:
@@ -95,13 +96,15 @@ dataset_loder = dataset_loder(
 )
 
 dataset = dataset_loder.dataset_map(
-    dataset_loder.process_qwen_Psy,
+    dataset_loder.process_qwen, # TODO 注意检查训练集映射函数
+    split=1
 )
 
 eval_dataset = None
 if eval_dataset_path is not None:
     eval_dataset = dataset_loder.dataset_map(
-        dataset_loder.process_qwen_Psy,
+        dataset_loder.process_qwen,
+        split=1
     )
     logger.info("验证数据集处理完成")
 
@@ -181,3 +184,4 @@ try:
 except Exception as e:
     logger.error(f"训练失败：{e}")
     raise
+
