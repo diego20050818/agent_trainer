@@ -12109,3 +12109,13 @@
 >>> 2025-09-18 11:31:59,922 - INFO -   use_rslora >>> True
 >>> 2025-09-18 11:31:59,922 - INFO -   loftq_config >>> None
 >>> 2025-09-18 11:32:06,022 - INFO - 开始训练！
+>>> 2025-09-18 11:41:34,170 - INFO - ========__main__  202509181141========
+>>> 2025-09-18 11:41:34,171 - INFO - 当前环境：/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/clean_env/bin/python
+>>> 2025-09-18 11:41:34,171 - INFO - 开始进行模型测试
+>>> 2025-09-18 11:41:45,298 - INFO - 已选择模型文件夹: qwen3-8b202509171651
+>>> 2025-09-18 11:41:45,301 - INFO - 最新的 LoRA checkpoint 路径:output/qwen3-8b202509171651/checkpoint-152
+>>> 2025-09-18 11:48:39,252 - INFO - ========__main__  202509181148========
+>>> 2025-09-18 11:48:39,253 - INFO - 当前环境：/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/clean_env/bin/python
+>>> 2025-09-18 11:48:39,254 - INFO - 开始进行模型测试
+>>> 2025-09-18 11:48:42,424 - INFO - 已选择模型文件夹: qwen3-8b202509171651
+>>> 2025-09-18 11:48:42,427 - INFO - 最新的 LoRA checkpoint 路径:output/qwen3-8b202509171651/checkpoint-152
