@@ -57,7 +57,14 @@ class dataset_loder:
         """
         dataset = load_dataset(self.dataset_class,data_files=self.dataset_path)
         dataset = dataset['train']
-        dataset = self.shuffle_data(dataset) # todo
+        
+        '''
+        TODO
+        数据集打乱操作
+        '''
+        data_list = list(dataset)
+        shuffled_data = self.shuffle_data(data_list) 
+        dataset = Dataset.from_list(shuffled_data)
 
         # 如果split小于1，则按比例采样训练集
         if split < 1:
@@ -300,6 +307,43 @@ class dataset_loder:
         logger.info("数据映射完成")
         return dataset
 
-    def shuffle_data(self,data:Dataset):
-        #TODO
-        pass
+    def shuffle_data(self, data_list: list, shuffle_probability: float = 0.4) -> list:
+        """
+        Args:
+            data_list (list):  将数据集转换为列表
+            shuffle_probility: 将套电部位换位的概率
+
+        Returns:
+            list: 处理后的数据列，待转换为数据集
+        """
+        # 编写数据集打乱方法
+        import random
+        
+        logger.info("Start To Process The Dataset")
+        
+        processed_count = 0
+        for conversation in data_list:
+            conversation_pair = conversation.get('conversation_pair')
+            if not conversation_pair:
+                continue
+
+            # 寻找“套电”环节
+            closing_start_index = -1
+            for i, turn in enumerate(conversation_pair):
+                if turn.get('thinking') == '套电':
+                    closing_start_index = i
+                    break
+            
+            # 以一定概率执行重组
+            if closing_start_index != -1 and closing_start_index > 0:
+                if random.random() < shuffle_probability:
+
+                    main_body = conversation_pair[:closing_start_index]
+                    closing_sequence = conversation_pair[closing_start_index:]
+                    
+                    conversation['conversation_pair'] = closing_sequence + main_body
+                    
+                    processed_count += 1
+
+        logger.info(f"内部顺序增强完成！共处理了 {processed_count} / {len(data_list)} 个对话。")
+        return data_list
