@@ -57,6 +57,7 @@ class dataset_loder:
         """
         dataset = load_dataset(self.dataset_class,data_files=self.dataset_path)
         dataset = dataset['train']
+        dataset = self.shuffle_data(dataset) # todo
 
         # 如果split小于1，则按比例采样训练集
         if split < 1:
@@ -298,3 +299,7 @@ class dataset_loder:
         )
         logger.info("数据映射完成")
         return dataset
+
+    def shuffle_data(self,data:Dataset):
+        #TODO
+        pass
