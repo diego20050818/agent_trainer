@@ -12311,3 +12311,124 @@
 >>> 2025-09-18 14:41:03,398 - INFO - >>> {'train_runtime': 7074.4168, 'train_samples_per_second': 0.679, 'train_steps_per_second': 0.021, 'train_loss': 0.9962939723443828, 'epoch': 8.0}
 >>> 2025-09-18 14:41:03,400 - INFO - 训练成功！
 >>> 2025-09-18 14:41:03,401 - INFO - 模型存放位置：./output/qwen3-8b202509181243
+>>> 2025-09-27 21:46:10,582 - INFO - 导入包完成
+>>> 2025-09-27 21:46:10,583 - INFO - ========train Qwen2ForCausalLM  202509272146========
+>>> 2025-09-27 21:46:10,584 - INFO - 当前环境：/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/.venv/bin/python
+>>> 2025-09-27 21:46:10,585 - INFO - 开始进行训练
+>>> 2025-09-27 21:46:10,599 - INFO - 基础配置文件读取完成
+>>> 2025-09-27 21:46:10,610 - INFO - 训练配置读取完成
+>>> 2025-09-27 21:46:10,610 - INFO - 数据集路径：dataset/own/Medical_Extension.json
+>>> 2025-09-27 21:46:10,611 - INFO - 模型路径:/home/liangshuqiao/models/qwen3-8b
+>>> 2025-09-27 21:46:10,898 - INFO - tokenizer读取完成
+>>> 2025-09-27 21:46:11,269 - INFO - model dtype:torch.bfloat16
+>>> 2025-09-27 21:46:11,270 - INFO - 模型导入完成
+>>> 2025-09-27 21:46:11,270 - INFO - 数据读取开始
+>>> 2025-09-27 21:46:12,733 - INFO - Start To Process The Dataset
+>>> 2025-09-27 21:46:12,735 - INFO - 内部顺序增强完成！共处理了 152 / 600 个对话。
+>>> 2025-09-27 21:46:12,758 - INFO - 数据下载完成，训练集大小: 600
+>>> 2025-09-27 21:46:19,315 - INFO - 数据映射完成
+>>> 2025-09-27 21:46:19,316 - INFO - 打印训练参数如下
+>>> 2025-09-27 21:46:19,317 - INFO -   task_type >>> CAUSAL_LM
+>>> 2025-09-27 21:46:19,317 - INFO -   dtype >>> torch.bfloat16
+>>> 2025-09-27 21:46:19,318 - INFO -   load_in_4bit >>> True
+>>> 2025-09-27 21:46:19,319 - INFO -   batch_size >>> 8
+>>> 2025-09-27 21:46:19,320 - INFO -   gradient_accumulator_steps >>> 4
+>>> 2025-09-27 21:46:19,321 - INFO -   warmup_steps >>> 1
+>>> 2025-09-27 21:46:19,321 - INFO -   epoch >>> 8
+>>> 2025-09-27 21:46:19,322 - INFO -   eval_steps >>> 5
+>>> 2025-09-27 21:46:19,323 - INFO -   learning_rate >>> 0.0002
+>>> 2025-09-27 21:46:19,323 - INFO -   lr_scheduler_type >>> cosine
+>>> 2025-09-27 21:46:19,324 - INFO -   max_seq_length >>> 2048
+>>> 2025-09-27 21:46:19,325 - INFO -   r >>> 8
+>>> 2025-09-27 21:46:19,325 - INFO -   interface_mode >>> False
+>>> 2025-09-27 21:46:19,326 - INFO -   target_modules >>> ['q_proj', 'k_proj', 'v_proj', 'o_proj']
+>>> 2025-09-27 21:46:19,326 - INFO -   lora_alpha >>> 16
+>>> 2025-09-27 21:46:19,327 - INFO -   lora_dropout >>> 0.1
+>>> 2025-09-27 21:46:19,327 - INFO -   bias >>> none
+>>> 2025-09-27 21:46:19,328 - INFO -   use_gradient_checkpointing >>> unsloth
+>>> 2025-09-27 21:46:19,328 - INFO -   random_state >>> 3407
+>>> 2025-09-27 21:46:19,329 - INFO -   use_rslora >>> True
+>>> 2025-09-27 21:46:19,329 - INFO -   loftq_config >>> None
+>>> 2025-09-27 22:33:22,511 - INFO - 导入包完成
+>>> 2025-09-27 22:33:22,512 - INFO - ========train Qwen2ForCausalLM  202509272233========
+>>> 2025-09-27 22:33:22,513 - INFO - 当前环境：/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/clean_env/bin/python
+>>> 2025-09-27 22:33:22,514 - INFO - 开始进行训练
+>>> 2025-09-27 22:33:22,534 - INFO - 基础配置文件读取完成
+>>> 2025-09-27 22:33:22,560 - INFO - 训练配置读取完成
+>>> 2025-09-27 22:33:22,560 - INFO - 数据集路径：dataset/own/Medical_Extension.json
+>>> 2025-09-27 22:33:22,561 - INFO - 模型路径:/home/liangshuqiao/models/qwen3-8b
+>>> 2025-09-27 22:33:22,994 - INFO - tokenizer读取完成
+>>> 2025-09-27 22:33:23,294 - INFO - model dtype:torch.bfloat16
+>>> 2025-09-27 22:33:23,294 - INFO - 模型导入完成
+>>> 2025-09-27 22:33:23,295 - INFO - 数据读取开始
+>>> 2025-09-27 22:33:36,581 - INFO - Start To Process The Dataset
+>>> 2025-09-27 22:40:18,576 - INFO - ========__main__  202509272240========
+>>> 2025-09-27 22:40:18,577 - INFO - 当前环境：/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/clean_env/bin/python
+>>> 2025-09-27 22:40:18,577 - INFO - 开始进行模型测试
+>>> 2025-09-27 22:40:44,253 - INFO - 导入包完成
+>>> 2025-09-27 22:40:44,254 - INFO - ========train Qwen2ForCausalLM  202509272240========
+>>> 2025-09-27 22:40:44,254 - INFO - 当前环境：/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/clean_env/bin/python
+>>> 2025-09-27 22:40:44,255 - INFO - 开始进行训练
+>>> 2025-09-27 22:40:44,261 - INFO - 基础配置文件读取完成
+>>> 2025-09-27 22:40:44,269 - INFO - 训练配置读取完成
+>>> 2025-09-27 22:40:44,269 - INFO - 数据集路径：dataset/own/Medical_Extension.json
+>>> 2025-09-27 22:40:44,270 - INFO - 模型路径:/home/liangshuqiao/models/qwen3-8b
+>>> 2025-09-27 22:40:44,716 - INFO - tokenizer读取完成
+>>> 2025-09-27 22:40:44,870 - INFO - model dtype:torch.bfloat16
+>>> 2025-09-27 22:40:44,871 - INFO - 模型导入完成
+>>> 2025-09-27 22:40:44,871 - INFO - 数据读取开始
+>>> 2025-09-27 22:40:45,781 - INFO - Start To Process The Dataset
+>>> 2025-09-27 22:40:45,783 - INFO - 内部顺序增强完成！共处理了 156 / 600 个对话。
+>>> 2025-09-27 22:40:45,805 - INFO - 数据下载完成，训练集大小: 600
+>>> 2025-09-27 22:40:52,185 - INFO - 数据映射完成
+>>> 2025-09-27 22:40:52,186 - INFO - 打印训练参数如下
+>>> 2025-09-27 22:40:52,186 - INFO -   task_type >>> CAUSAL_LM
+>>> 2025-09-27 22:40:52,186 - INFO -   dtype >>> torch.bfloat16
+>>> 2025-09-27 22:40:52,187 - INFO -   load_in_4bit >>> True
+>>> 2025-09-27 22:40:52,187 - INFO -   batch_size >>> 8
+>>> 2025-09-27 22:40:52,187 - INFO -   gradient_accumulator_steps >>> 4
+>>> 2025-09-27 22:40:52,188 - INFO -   warmup_steps >>> 1
+>>> 2025-09-27 22:40:52,188 - INFO -   epoch >>> 8
+>>> 2025-09-27 22:40:52,188 - INFO -   eval_steps >>> 5
+>>> 2025-09-27 22:40:52,189 - INFO -   learning_rate >>> 0.0002
+>>> 2025-09-27 22:40:52,189 - INFO -   lr_scheduler_type >>> cosine
+>>> 2025-09-27 22:40:52,189 - INFO -   max_seq_length >>> 2048
+>>> 2025-09-27 22:40:52,190 - INFO -   r >>> 8
+>>> 2025-09-27 22:40:52,190 - INFO -   interface_mode >>> False
+>>> 2025-09-27 22:40:52,190 - INFO -   target_modules >>> ['q_proj', 'k_proj', 'v_proj', 'o_proj']
+>>> 2025-09-27 22:40:52,191 - INFO -   lora_alpha >>> 16
+>>> 2025-09-27 22:40:52,191 - INFO -   lora_dropout >>> 0.1
+>>> 2025-09-27 22:40:52,191 - INFO -   bias >>> none
+>>> 2025-09-27 22:40:52,192 - INFO -   use_gradient_checkpointing >>> unsloth
+>>> 2025-09-27 22:40:52,192 - INFO -   random_state >>> 3407
+>>> 2025-09-27 22:40:52,192 - INFO -   use_rslora >>> True
+>>> 2025-09-27 22:40:52,193 - INFO -   loftq_config >>> None
+>>> 2025-09-29 18:26:45,516 - INFO - 已选择模型文件夹: qwen3-8b202509181243
+>>> 2025-09-29 18:26:45,533 - INFO - 最新的 LoRA checkpoint 路径:output/qwen3-8b202509181243/checkpoint-152
+>>> 2025-09-29 18:26:45,535 - INFO - 正在加载基础模型...
+>>> 2025-09-29 18:26:52,057 - INFO - 正在加载LoRA权重...
+>>> 2025-09-29 18:26:52,633 - INFO - 正在合并模型...
+>>> 2025-09-29 18:26:52,752 - INFO - 正在加载tokenizer...
+>>> 2025-09-29 18:26:53,186 - INFO - 正在保存合并后的模型...
+>>> 2025-09-29 18:29:05,810 - INFO - 模型合并完成，已保存至: /home/liangshuqiao/models/qwen_v2
+>>> 2025-09-29 18:29:59,281 - INFO - 开始进行原始模型对话测试
+>>> 2025-09-29 18:30:01,603 - INFO - 导入包完成
+>>> 2025-09-29 18:30:01,610 - INFO - 配置文件读取完成
+>>> 2025-09-30 09:06:11,244 - INFO - 导入包完成
+>>> 2025-09-30 09:06:11,260 - INFO - 导入包完成
+>>> 2025-09-30 09:06:11,260 - INFO - ========train Qwen2ForCausalLM  202509300906========
+>>> 2025-09-30 09:06:11,261 - INFO - 当前环境：/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/clean_env/bin/python
+>>> 2025-09-30 09:06:11,261 - INFO - 开始进行训练
+>>> 2025-09-30 09:06:11,268 - INFO - 基础配置文件读取完成
+>>> 2025-09-30 09:06:11,276 - INFO - 训练配置读取完成
+>>> 2025-09-30 09:06:11,276 - INFO - 数据集路径：dataset/own/Medical_Extension.json
+>>> 2025-09-30 09:06:11,277 - INFO - 模型路径:/home/liangshuqiao/models/qwen3-8b
+>>> 2025-09-30 09:06:11,741 - INFO - tokenizer读取完成
+>>> 2025-09-30 09:06:11,896 - INFO - model dtype:torch.bfloat16
+>>> 2025-09-30 09:06:11,896 - INFO - 模型导入完成
+>>> 2025-09-30 09:06:11,897 - INFO - 数据读取开始
+>>> 2025-09-30 09:06:12,786 - INFO - Start To Process The Dataset
+>>> 2025-09-30 09:06:12,788 - INFO - 内部顺序增强完成！共处理了 147 / 600 个对话。
+>>> 2025-09-30 09:06:12,812 - INFO - 数据下载完成，训练集大小: 600
+>>> 2025-09-30 09:06:25,556 - INFO - 正在加载模型: /home/liangshuqiao/models/qwen3-8b
+>>> 2025-09-30 09:06:33,400 - INFO - 模型加载完成

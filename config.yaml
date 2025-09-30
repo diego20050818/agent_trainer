@@ -1,7 +1,9 @@
 file_load:
   model_name: qwen3-8b
   #model_path: /home/liangshuqiao/models/qwen05 #模型文件路径
-  model_path: /home/liangshuqiao/models/qwen3-8b #模型文件路径
+  model_path: /home/liangshuqiao/models/qwen3-8b #模型文件路径 
+
+  # model_path: /home/liangshuqiao/models/qwen_v2
   # model_path: /home/liangshuqiao/models/qwen05 #模型文件路径
   # model_path: /home/liangshuqiao/models/DeepSeek-R1-Distill-Qwen-7B #模型文件路径
   # dataset_path: /home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/dataset/PsyDTCorpus/PsyDTCorpus_train_mulit_turn_packing.json #数据集文件路径
