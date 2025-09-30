@@ -1,13 +1,23 @@
 """处理私有数据集的工具类
 """
+import os
+import sys
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if project_root not in sys.path:
+    sys.path.append(project_root)
+
 from typing import Optional
 from datasets import Dataset,load_dataset
 from transformers import AutoTokenizer
-from .logger import logger
 
+from utils.logger import logger
 from ruamel.yaml import YAML
+logger.info("导入包完成")
 
-config_path = '/home/liangshuqiao/agent_trainer/agent-fine-tuning-trainer/config.yaml'
+# 获取项目根目录
+
+config_path = os.path.join(project_root, 'config.yaml')
+
 yaml = YAML()
 with open(config_path,'r') as f:
     config = yaml.load(f)

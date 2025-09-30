@@ -6,12 +6,14 @@ test_origin = 'test_origin_model.py'
 test_qwen_lora = 'test_QwenForCausalLM.py'
 train_qwen_lora = 'train_QwenForCausalLM.py'
 merge_model = 'merge_model.py'
+check_model = "check_model.py"
 
 op_dict = {
     '1':[test_origin,'测试原始模型'],
     '2':[test_qwen_lora,'测试微调效果'],
     '3':[train_qwen_lora,'训练模型'],
-    '4':[merge_model,'合并模型']
+    '4':[merge_model,'合并模型'],
+    '5':[check_model,'查看模型']
 }
 
 
